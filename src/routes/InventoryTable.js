@@ -1,45 +1,47 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useState, useRef } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import './inventory.scss';
 import routerParams from '@redhat-cloud-services/frontend-components-utilities/files/RouterParams';
 import { PageHeader, PageHeaderTitle, Main } from '@redhat-cloud-services/frontend-components';
-import { entitiesReducer } from '../store';
+// import { entitiesReducer } from '../store';
 import * as actions from '../actions';
 import {
     Grid,
-    GridItem,
-    Dropdown,
-    DropdownItem,
-    KebabToggle
+    Button
+    // GridItem,
+    // Dropdown,
+    // DropdownItem,
+    // KebabToggle
 } from '@patternfly/react-core';
-import { asyncInventoryLoader } from '../components/inventory/AsyncInventory';
-import { getRegistry } from '@redhat-cloud-services/frontend-components-utilities/files/Registry';
+// import { asyncInventoryLoader } from '../components/inventory/AsyncInventory';
+// import { getRegistry } from '@redhat-cloud-services/frontend-components-utilities/files/Registry';
 import { addNotification } from '@redhat-cloud-services/frontend-components-notifications';
 import DeleteModal from '../components/DeleteModal';
 import TextInputModal from '@redhat-cloud-services/frontend-components-inventory-general-info/TextInputModal';
+import { PrimaryToolbar } from '@redhat-cloud-services/frontend-components';
 
-const Inventory = ({ clearNotifications, deleteEntity, addNotification, rows, updateDisplayName }) => {
+const Inventory = ({ deleteEntity, addNotification, updateDisplayName }) => {
     const inventory = useRef(null);
-    const [ConnectedInventory, setInventory] = useState();
+    // const [ConnectedInventory, setInventory] = useState();
     const [isModalOpen, handleModalToggle] = useState(false);
-    const [currentSytem, activateSystem] = useState({});
+    const [currentSytem] = useState({});
     const [filters, onSetfilters] = useState([]);
-    const [dropdownOpened, onDropdownToggle] = useState(false);
+    // const [dropdownOpened, onDropdownToggle] = useState(false);
     const [ediOpen, onEditOpen] = useState(false);
-    const loadInventory = async () => {
-        clearNotifications();
-        const {
-            inventoryConnector,
-            mergeWithEntities
-        } = await asyncInventoryLoader();
-        getRegistry().register({
-            ...mergeWithEntities(entitiesReducer)
-        });
+    // const loadInventory = async () => {
+    //     clearNotifications();
+    //     const {
+    //         inventoryConnector,
+    //         mergeWithEntities
+    //     } = await asyncInventoryLoader();
+    //     getRegistry().register({
+    //         ...mergeWithEntities(entitiesReducer)
+    //     });
 
-        const { InventoryTable } = inventoryConnector();
-        setInventory(() => InventoryTable);
-    };
+    //     const { InventoryTable } = inventoryConnector();
+    //     setInventory(() => InventoryTable);
+    // };
 
     const onRefresh = (options) => {
         onSetfilters(options.filters);
@@ -48,9 +50,9 @@ const Inventory = ({ clearNotifications, deleteEntity, addNotification, rows, up
         }
     };
 
-    useEffect(() => {
-        loadInventory();
-    }, []);
+    // useEffect(() => {
+    //     loadInventory();
+    // }, []);
 
     return (
         <React.Fragment>
@@ -59,7 +61,63 @@ const Inventory = ({ clearNotifications, deleteEntity, addNotification, rows, up
             </PageHeader>
             <Main>
                 <Grid gutter="md">
-                    <GridItem span={12}>
+                    <PrimaryToolbar
+                        pagination={{
+                            itemCount: 10
+                        }}
+                        exportConfig={{
+                            onSelect: console.log
+                        }}
+                        actionsConfig={{
+                            actions: [
+                                <Button key="first">Some action</Button>,
+                                <Button key="second">Another button</Button>,
+                                {
+                                    label: 'Or objects',
+                                    onClick: () => console.log('fffff')
+                                },
+                                'or plain string'
+                            ]
+                        }}
+                        sortByConfig={{
+                            direction: 'asc'
+                        }}
+                        bulkSelect={{
+                            items: [{
+                                title: 'Some action',
+                                onClick: console.log
+                            }]
+                        }}
+                        filterConfig={{
+                            items: [{
+                                label: 'First filter'
+                            }, {
+                                label: 'Second filter filter filter filter filter filter filter',
+                                type: 'checkbox',
+                                filterValues: {
+                                    items: [{ label: 'Some checkbox' }]
+                                }
+                            }]
+                        }}
+                        activeFiltersConfig={{
+                            filters: [{
+                                category: 'Some',
+                                chips: [{
+                                    name: 'something'
+                                }, {
+                                    name: 'something 2'
+                                }]
+                            }, {
+                                category: 'Another',
+                                chips: [{
+                                    name: 'One chip'
+                                }]
+                            }, {
+                                name: 'Something else'
+                            }]
+                        }}
+                    />
+                    {/* <GridItem span={12}>
                         {
                             ConnectedInventory &&
                                 <ConnectedInventory
@@ -108,7 +166,7 @@ const Inventory = ({ clearNotifications, deleteEntity, addNotification, rows, up
                                     />
                                 </ConnectedInventory>
                         }
-                    </GridItem>
+                    </GridItem> */}
                 </Grid>
             </Main>
             <DeleteModal
