@@ -3,12 +3,12 @@ import React, { useEffect, useState, useRef } from 'react';
 import PropTypes from 'prop-types';
 import { connect, shallowEqual, useSelector } from 'react-redux';
 import './inventory.scss';
-import routerParams from '@redhat-cloud-services/frontend-components-utilities/files/esm/RouterParams';
+import routerParams from '@redhat-cloud-services/frontend-components-utilities/RouterParams';
 import { PageHeader, PageHeaderTitle, Main } from '@redhat-cloud-services/frontend-components';
 import { entitiesReducer } from '../store';
 import * as actions from '../actions';
 import { Grid, GridItem } from '@patternfly/react-core';
-import { getRegistry } from '@redhat-cloud-services/frontend-components-utilities/files/esm/Registry';
+import { getRegistry } from '@redhat-cloud-services/frontend-components-utilities/Registry';
 import { addNotification } from '@redhat-cloud-services/frontend-components-notifications/redux';
 import DeleteModal from '../components/DeleteModal';
 import TextInputModal from '@redhat-cloud-services/frontend-components-inventory-general-info/esm/TextInputModal';
@@ -127,7 +127,7 @@ const Inventory = ({
     };
 
     useEffect(() => {
-        insights.chrome?.hideGlobalFilter?.(false);
+        // insights.chrome?.hideGlobalFilter?.(false);
         insights.chrome.appAction('system-list');
         insights.chrome.appObjectId();
         insights.chrome.on('GLOBAL_FILTER_UPDATE', ({ data }) => {
